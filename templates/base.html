@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Career Copilot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background: #f5f7fb;
+            color: #1a1a1a;
+        }
+        header {
+            background: #111827;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+        .logo {
+            color: white;
+            font-weight: 700;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+        header nav {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 4px;
+        }
+        header nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 10px;
+            font-weight: 500;
+            padding: 3px 5px;
+            border-radius: 6px;
+            background: rgba(255,255,255,0.1);
+            white-space: nowrap;
+        }
+        header nav a:hover {
+            background: #2563eb;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px 15px;
+        }
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+            font-size: 13px;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">🤖 AiCopilot</div>
+        <nav>
+            <a href="/history">History</a>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/profile">Profile</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>@2026 AI Career Copilot</p>
+    </footer>
+</body>
+</html>

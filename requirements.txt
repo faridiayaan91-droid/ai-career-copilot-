@@ -1,0 +1,11 @@
+Flask
+SQLAlchemy
+PyMySQL
+PyPDF2
+python-docx
+python-dotenv
+streamlit
+groq
+pandas
+numpy
+gunicorn

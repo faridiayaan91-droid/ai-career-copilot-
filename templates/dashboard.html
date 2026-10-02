@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .welcome {
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+    }
+    .card h3 {
+        margin-bottom: 15px;
+        font-size: 17px;
+    }
+    textarea {
+        width: 100%;
+        height: 140px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        resize: vertical;
+    }
+    textarea:focus {
+        border-color: #2563eb;
+        outline: none;
+    }
+    .card input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+    .card input[type="file"] {
+        margin-top: 12px;
+        font-size: 14px;
+        width: 100%;
+    }
+    .card button {
+        width: 100%;
+        margin-top: 18px;
+        padding: 13px;
+        background: #111827;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .card button:hover {
+        background: #2563eb;
+    }
+    .card button:disabled {
+        background: #666;
+        cursor: not-allowed;
+    }
+    .loader {
+        display: none;
+        text-align: center;
+        margin-top: 15px;
+        padding: 15px;
+        background: #f0f4ff;
+        border-radius: 10px;
+    }
+    .loader p {
+        font-size: 15px;
+        color: #2563eb;
+        font-weight: 500;
+    }
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #ddd;
+        border-top: 3px solid #2563eb;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px auto;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    .score-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    .score-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    .score-number {
+        font-size: 52px;
+        font-weight: 800;
+        margin-bottom: 5px;
+    }
+    .score-number.green { color: #16a34a; }
+    .score-number.yellow { color: #d97706; }
+    .score-number.red { color: #dc2626; }
+    .score-bar-bg {
+        width: 100%;
+        height: 12px;
+        background: #e5e7eb;
+        border-radius: 99px;
+        margin: 15px 0;
+        overflow: hidden;
+    }
+    .score-bar {
+        height: 100%;
+        border-radius: 99px;
+        width: 0%;
+        transition: width 1.5s ease;
+    }
+    .score-bar.green { background: #16a34a; }
+    .score-bar.yellow { background: #d97706; }
+    .score-bar.red { background: #dc2626; }
+    .score-feedback {
+        font-size: 14px;
+        color: #444;
+        margin-top: 10px;
+        font-style: italic;
+    }
+    .score-label {
+        font-size: 13px;
+        font-weight: 600;
+        padding: 4px 12px;
+        border-radius: 99px;
+        display: inline-block;
+        margin-top: 8px;
+    }
+    .score-label.green { background: #dcfce7; color: #16a34a; }
+    .score-label.yellow { background: #fef3c7; color: #d97706; }
+    .score-label.red { background: #fee2e2; color: #dc2626; }
+    .result {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+    .result h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #111827;
+        font-size: 15px;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+    }
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    .tag {
+        padding: 5px 12px;
+        border-radius: 99px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .tag.green {
+        background: #dcfce7;
+        color: #16a34a;
+    }
+    .tag.red {
+        background: #fee2e2;
+        color: #dc2626;
+    }
+    .result ul {
+        padding-left: 20px;
+    }
+    .result ul li {
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #444;
+    }
+    .company-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 15px;
+        background: #f5f7fb;
+        border-radius: 10px;
+        margin-bottom: 10px;
+    }
+    .company-card strong {
+        font-size: 14px;
+        color: #111827;
+    }
+    .company-card span {
+        font-size: 13px;
+        color: #666;
+    }
+    .apply-btn {
+        padding: 6px 14px;
+        background: #2563eb;
+        color: white;
+        border-radius: 6px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+    }
+    .apply-btn:hover {
+        background: #1d4ed8;
+    }
+    @media (max-width: 600px) {
+        .card { padding: 18px; }
+        textarea { height: 120px; }
+        .company-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .score-number { font-size: 40px; }
+    }
+</style>
+
+<p class="welcome">Welcome, {{ user }} 👋</p>
+<div class="card">
+    <h3>📄 Resume Analyser</h3>
+    <form method="post" enctype="multipart/form-data" id="resumeForm">
+        <textarea name="resume" placeholder="Paste your resume here (optional)"></textarea>
+        <p style="margin-top:10px; color:#666; font-size:13px;">Or upload file:</p>
+        <input type="file" name="file">
+        <input type="text" name="role" placeholder="What do you want to become? (e.g. Backend Engineer)" required>
+        <button type="submit" id="analyseBtn">🔍 Analyse</button>
+    </form>
+    <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p>🔍 Analysing your resume...</p>
+    </div>
+</div>
+
+{% if result %}
+
+{% set score = result.get("score", 0) %}
+{% if score >= 71 %}
+    {% set color = "green" %}
+    {% set label = "Strong 💪" %}
+{% elif score >= 41 %}
+    {% set color = "yellow" %}
+    {% set label = "Average 📈" %}
+{% else %}
+    {% set color = "red" %}
+    {% set label = "Weak 😟" %}
+{% endif %}
+
+<div class="score-card">
+    <p class="score-title">🎯 Resume Score</p>
+    <p class="score-number {{ color }}" id="scoreNumber">0</p>
+    <div class="score-bar-bg">
+        <div class="score-bar {{ color }}" id="scoreBar"></div>
+    </div>
+    <span class="score-label {{ color }}">{{ label }}</span>
+    <p class="score-feedback">"{{ result.get('score_feedback', '') }}"</p>
+</div>
+
+<div class="result">
+    {% if result.error %}
+    <p style="color: red;">Error: {{ result.error }}</p>
+    {% endif %}
+    <h3>✅ Skills</h3>
+    <div class="tags-container">
+        {% for s in result.get("skills", []) %}
+        <span class="tag green">{{ s }}</span>
+        {% endfor %}
+    </div>
+    <h3>❌ Missing Skills</h3>
+    <div class="tags-container">
+        {% for s in result.get("missing_skills", []) %}
+        <span class="tag red">{{ s }}</span>
+        {% endfor %}
+    </div>
+    <h3>🗺️ Roadmap</h3>
+    <ul>
+        {% for s in result.get("roadmap", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <h3>🎯 Interview Questions</h3>
+    <ul>
+        {% for s in result.get("interview_questions", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <h3>🏢 Apply to Companies</h3>
+    {% for c in result.get("companies", []) %}
+    <div class="company-card">
+        <div>
+            <strong>{{ c.name }}</strong><br>
+            <span>{{ c.role }}</span>
+        </div>
+        <a href="{{ c.apply_link }}" target="_blank" class="apply-btn">Apply Now →</a>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<script>
+    document.getElementById("resumeForm").addEventListener("submit", function() {
+        document.getElementById("loader").style.display = "block";
+        document.getElementById("analyseBtn").disabled = true;
+        document.getElementById("analyseBtn").innerText = "Analysing...";
+    });
+
+    // Score animation
+    var scoreEl = document.getElementById("scoreNumber");
+    var scoreBar = document.getElementById("scoreBar");
+    if (scoreEl) {
+        var target = {{ result.get("score", 0) if result else 0 }};
+        var count = 0;
+        var timer = setInterval(function() {
+            count += 2;
+            if (count >= target) {
+                count = target;
+                clearInterval(timer);
+            }
+            scoreEl.innerText = count;
+        }, 20);
+        setTimeout(function() {
+            scoreBar.style.width = target + "%";
+        }, 100);
+    }
+</script>
+
+{% endblock %}

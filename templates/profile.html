@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 500px;
+        margin: 30px auto;
+    }
+    .profile-card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+    .profile-card h2 {
+        margin-bottom: 20px;
+        font-size: 20px;
+    }
+    .profile-card input,
+    .profile-card textarea {
+        width: 100%;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+    .profile-card textarea {
+        height: 100px;
+        resize: vertical;
+    }
+    .profile-card input:focus,
+    .profile-card textarea:focus {
+        border-color: #2563eb;
+        outline: none;
+    }
+    .profile-card button {
+        width: 100%;
+        margin-top: 18px;
+        padding: 12px;
+        background: #111827;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .profile-card button:hover {
+        background: #2563eb;
+    }
+    .profile-info {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: #f5f7fb;
+        border-radius: 8px;
+    }
+    .profile-info p {
+        font-size: 14px;
+        color: #444;
+        margin-bottom: 5px;
+    }
+</style>
+<div class="profile-container">
+    <div class="profile-card">
+        <h2>👤 My Profile</h2>
+        <div class="profile-info">
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Name:</strong> {{ user.name or "Not set" }}</p>
+            <p><strong>Bio:</strong> {{ user.bio or "Not set" }}</p>
+        </div>
+        <form method="post">
+            <input type="text" name="name" placeholder="Enter your name" value="{{ user.name or '' }}">
+            <textarea name="bio" placeholder="Tell us about yourself">{{ user.bio or '' }}</textarea>
+            <button type="submit">💾 Save Profile</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

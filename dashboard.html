@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block content %}
+<style>
+    .welcome {
+        font-size: 22px;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .card {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+        margin-bottom: 30px;
+    }
+    .card h3 {
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+    textarea {
+        width: 100%;
+        height: 150px;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+        resize: vertical;
+    }
+    textarea:focus {
+        border-color: #2563eb;
+        outline: none;
+    }
+    .card input[type="text"] {
+        width: 100%;
+        padding: 12px;
+        margin-top: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-size: 14px;
+    }
+    .card input[type="file"] {
+        margin-top: 12px;
+        font-size: 14px;
+    }
+    .card button {
+        margin-top: 18px;
+        padding: 12px 30px;
+        background: #111827;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 15px;
+        font-weight: 500;
+        cursor: pointer;
+    }
+    .card button:hover {
+        background: #2563eb;
+    }
+    .result {
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+    .result h3 {
+        margin-top: 20px;
+        margin-bottom: 10px;
+        color: #111827;
+        font-size: 16px;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+    }
+    .result ul {
+        padding-left: 20px;
+    }
+    .result ul li {
+        margin-bottom: 6px;
+        font-size: 14px;
+        color: #444;
+    }
+</style>
+<p class="welcome">Welcome, {{ user }} 👋</p>
+<div class="card">
+    <h3>📄 Resume Analyser</h3>
+    <form method="post" enctype="multipart/form-data">
+        <textarea name="resume" placeholder="Paste your resume here (optional)"></textarea>
+        <p style="margin-top:10px; color:#666; font-size:14px;">Or upload file:</p>
+        <input type="file" name="file">
+        <input type="text" name="role" placeholder="What do you want to become? (e.g. Backend Engineer)" required>
+        <button type="submit">🔍 Analyse</button>
+    </form>
+</div>
+{% if result %}
+<div class="result">
+    {% if result.error %}
+    <p style="color: red;">Error: {{ result.error }}</p>
+    {% endif %}
+    <h3>✅ Skills</h3>
+    <ul>
+        {% for s in result.get("skills", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <h3>❌ Missing Skills</h3>
+    <ul>
+        {% for s in result.get("missing_skills", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <h3>🗺️ Roadmap</h3>
+    <ul>
+        {% for s in result.get("roadmap", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+    <h3>🎯 Interview Questions</h3>
+    <ul>
+        {% for s in result.get("interview_questions", []) %}
+        <li>{{ s }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+{% endblock %}
