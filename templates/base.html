@@ -4,78 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Career Copilot</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        if (localStorage.getItem("theme") === "dark") {
+            document.documentElement.setAttribute("data-theme", "dark");
         }
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background: #f5f7fb;
-            color: #1a1a1a;
-        }
-        header {
-            background: #111827;
-            padding: 10px 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
-        }
-        .logo {
-            color: white;
-            font-weight: 700;
-            font-size: 10px;
-            white-space: nowrap;
-        }
-        header nav {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 4px;
-        }
-        header nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 10px;
-            font-weight: 500;
-            padding: 3px 5px;
-            border-radius: 6px;
-            background: rgba(255,255,255,0.1);
-            white-space: nowrap;
-        }
-        header nav a:hover {
-            background: #2563eb;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px 15px;
-        }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #888;
-            font-size: 13px;
-            margin-top: 40px;
-        }
-    </style>
+    </script>
 </head>
 <body>
     <header>
-        <div class="logo">🤖 AiCopilot</div>
+        <div class="logo">🤖 AI Career Copilot</div>
         <nav>
-            <a href="/history">History</a>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/profile">Profile</a>
-            <a href="/logout">Logout</a>
+            {% if session.get('user') %}
+                <a href="/history">History</a>
+                <a href="/dashboard">Dashboard</a>
+                <a href="/logout">Logout</a>
+            {% endif %}
+            <button id="themeToggle" class="theme-btn" title="Dark / Light">🌙</button>
         </nav>
     </header>
+
     <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </main>
+
     <footer>
         <p>@2026 AI Career Copilot</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <script>
+        const toggleBtn = document.getElementById("themeToggle");
+        function updateIcon() {
+            const dark = document.documentElement.getAttribute("data-theme") === "dark";
+            toggleBtn.textContent = dark ? "☀️" : "🌙";
+        }
+        toggleBtn.addEventListener("click", () => {
+            const dark = document.documentElement.getAttribute("data-theme") === "dark";
+            if (dark) {
+                document.documentElement.removeAttribute("data-theme");
+                localStorage.setItem("theme", "light");
+            } else {
+                document.documentElement.setAttribute("data-theme", "dark");
+                localStorage.setItem("theme", "dark");
+            }
+            updateIcon();
+        });
+        updateIcon();
+    </script>
+
+    {% block scripts %}{% endblock %}
 </body>
 </html>
