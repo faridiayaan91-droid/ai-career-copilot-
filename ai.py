@@ -3,10 +3,13 @@ from dotenv import load_dotenv
 import os
 import json
 
+# Load .env file
 load_dotenv()
 
+# Get API key from environment variable
 api_key = os.getenv("GROQ_API_KEY")
 
+# Create Groq client
 client = Groq(api_key=api_key)
 
 
@@ -52,7 +55,7 @@ Return only JSON:
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             temperature=0.3,
             messages=[
                 {
